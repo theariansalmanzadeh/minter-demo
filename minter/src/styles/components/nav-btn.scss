@@ -1,0 +1,6 @@
+.nav-btn {
+  @apply bg-secondary py-2;
+  &:disabled {
+    @apply bg-slate-600 text-gray-300;
+  }
+}

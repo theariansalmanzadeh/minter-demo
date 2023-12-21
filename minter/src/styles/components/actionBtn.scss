@@ -1,0 +1,10 @@
+.action-btn {
+  @apply outline-none outline-offset-0 bg-primary duration-500 delay-500 text-lg py-2;
+  outline: none !important;
+  &:hover {
+    @apply bg-primaryDark;
+  }
+  &:disabled {
+    @apply bg-blue-300 cursor-not-allowed;
+  }
+}

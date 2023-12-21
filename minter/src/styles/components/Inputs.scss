@@ -1,0 +1,9 @@
+.inputs {
+  @apply outline-0;
+  & .p-inputnumber-input {
+    @apply py-3 px-2 rounded-lg text-lg;
+  }
+}
+.p-inputtext {
+  @apply py-3 px-2 rounded-lg text-lg;
+}
