@@ -5,9 +5,11 @@ import { Toast } from "primereact/toast";
 import { ethers } from "ethers";
 import TxStatusDialog from "../TxStatusDialog/TxStatusDialog";
 import { modalType } from "../../types/ModaStatus";
+import { CgSpinner } from "react-icons/cg";
 
 function MintToken({ contract, toast, setTokenMinted }: Iprops) {
   const [mintAmount, setMintAmount] = useState(0);
+  const [isBtnLocked, setIsBtnLocked] = useState(false);
   const [isModal, setIsModal] = useState<modalType>(modalType.idle);
   const blockHashRef = useRef<string | null>(null);
   const showAddressError = (msg: string) => {
@@ -21,28 +23,31 @@ function MintToken({ contract, toast, setTokenMinted }: Iprops) {
   };
 
   const mintHandler = async () => {
+    if (isBtnLocked) return;
     if (mintAmount === 0) {
       showAddressError("no Amount set");
       return;
     }
     try {
+      setIsBtnLocked(true);
+
       const tx = await contract.mint(
         ethers.utils.parseEther(mintAmount.toString())
       );
       setIsModal(modalType.ongiong);
       const res = await tx.wait();
-      console.log(res);
       if (res.status === 1) {
         setIsModal(modalType.success);
-        blockHashRef.current = res.blockHash;
+        blockHashRef.current = res.transactionHash;
       } else if (res.status === 0) {
         blockHashRef.current = res.transactionHash;
         setIsModal(modalType.failed);
       }
+      setIsBtnLocked(false);
       setTokenMinted(mintAmount);
     } catch (e) {
       console.log(e);
-
+      setIsBtnLocked(false);
       setIsModal(modalType.failed);
     }
   };
@@ -59,10 +64,15 @@ function MintToken({ contract, toast, setTokenMinted }: Iprops) {
         onChange={(e) => setMintAmount(e.value ?? 0)}
       />
       <Button
-        className="mt-2 md:mt-5 self-stretch action-btn"
-        label="Mint"
+        className="mt-2 md:mt-5 self-stretch action-btn felx justify-center relative"
+        disabled={isBtnLocked}
         onClick={() => mintHandler()}
-      />
+      >
+        {isBtnLocked && (
+          <CgSpinner className="animate-spin absolute left-[30%] md:left-[40%]" />
+        )}
+        <span>Mint</span>
+      </Button>
       <TxStatusDialog
         txState={isModal}
         msgLink={blockHashRef.current as string}

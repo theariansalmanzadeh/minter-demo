@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { AiOutlineDisconnect } from "react-icons/ai";
 import { useAccount, useParticleConnect } from "@particle-network/connectkit";
 import { useEthereum } from "@particle-network/auth-core-modal";
+import { useConnect } from "@particle-network/auth-core-modal";
 import { formatBalance } from "../../utils/web3";
 
 function Profile({ contract, provider }: Iprops) {
@@ -14,6 +15,7 @@ function Profile({ contract, provider }: Iprops) {
   const account = useAccount();
   const { address } = useEthereum();
   const particleConnect = useParticleConnect();
+  const { disconnect } = useConnect();
   const userAddress = address || account;
 
   const getUserBalance = useCallback(async () => {
@@ -58,6 +60,7 @@ function Profile({ contract, provider }: Iprops) {
         <Button
           className="mt-10 self-stretch bg-red-900 text-white justify-center gap-2"
           onClick={() => {
+            disconnect();
             particleConnect.disconnect();
           }}
         >

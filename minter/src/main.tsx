@@ -24,14 +24,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           },
         },
         fiatCoin: "USD",
-        authTypes: [
-          AuthType.email,
-          AuthType.facebook,
-          AuthType.github,
-          AuthType.apple,
-          AuthType.phone,
-          AuthType.discord,
-        ],
+        authTypes: [],
 
         promptSettingConfig: {
           //optional: particle security account config
@@ -46,7 +39,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       }}
       theme={"dark"}
       language={"en"} //optional：localize, default en
-      walletSort={["Particle Auth", "Wallet"]} //optional：walelt order
+      walletSort={["Wallet"]} //optional：walelt order
     >
       <App />
     </ModalProvider>

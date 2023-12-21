@@ -1,4 +1,10 @@
-import React, { RefObject, useEffect, useRef, useState } from "react";
+import React, {
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { InputNumber } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
@@ -9,11 +15,12 @@ import { useEthereum } from "@particle-network/auth-core-modal";
 import { formatBalance, isAddressValid } from "../../utils/web3";
 import TxStatusDialog from "../TxStatusDialog/TxStatusDialog";
 import { modalType } from "../../types/ModaStatus";
+import { CgSpinner } from "react-icons/cg";
 
 function SendToken({ contract, toast, tokenMinted }: Iprops) {
   const account = useAccount();
   const { address } = useEthereum();
-
+  const [isBtnLocked, setIsBtnLocked] = useState(false);
   const [fromAmount, setFromAmount] = useState(tokenMinted);
   const [toAddress, setToAddress] = useState("");
   const [loadingBalance, setLoadingBalance] = useState(true);
@@ -32,7 +39,7 @@ function SendToken({ contract, toast, tokenMinted }: Iprops) {
   };
 
   const loadingAnimation = () => (
-    <div className="h-full w-[8rem]  z-10 animate-pulse absolute top-0 left-0">
+    <div className="h-full w-[8rem] z-10 animate-pulse absolute top-0 left-0">
       <div className=" rounded-md bg-slate-400 h-full w-full"></div>
     </div>
   );
@@ -50,35 +57,43 @@ function SendToken({ contract, toast, tokenMinted }: Iprops) {
       showAddressError("No funds");
       return;
     }
-    const tx = await contract.transfer(
-      toAddress,
-      ethers.utils.parseEther(fromAmount.toString())
-    );
-    const res = await tx.wait();
-    if (res.status === 1) {
-      setIsModal(modalType.success);
-      blockHashRef.current = res.blockHash;
-    } else if (res.status === 0) {
-      blockHashRef.current = res.transactionHash;
-      setIsModal(modalType.failed);
+    try {
+      const tx = await contract.transfer(
+        toAddress,
+        ethers.utils.parseEther(fromAmount.toString())
+      );
+      const res = await tx.wait();
+      if (res.status === 1) {
+        setIsModal(modalType.success);
+        blockHashRef.current = res.transactionHash;
+      } else if (res.status === 0) {
+        blockHashRef.current = res.transactionHash;
+        setIsModal(modalType.failed);
+      }
+      setIsBtnLocked(false);
+    } catch (e) {
+      setIsBtnLocked(false);
     }
   };
 
-  const getUserBalance = async (address: string) => {
-    setLoadingBalance(true);
-    try {
-      const _bal = await contract.balanceOf(address);
-      setOwnedAmount(formatBalance(_bal));
-      setLoadingBalance(false);
-    } catch (e) {
-      setLoadingBalance(false);
-    }
-  };
+  const getUserBalance = useCallback(
+    async (address: string) => {
+      setLoadingBalance(true);
+      try {
+        const _bal = await contract.balanceOf(address);
+        setOwnedAmount(formatBalance(_bal));
+        setLoadingBalance(false);
+      } catch (e) {
+        setLoadingBalance(false);
+      }
+    },
+    [contract]
+  );
 
   useEffect(() => {
     const userAddress = (account || address) ?? "";
     getUserBalance(userAddress);
-  }, [account, address]);
+  }, [account, address, getUserBalance]);
   return (
     <React.Fragment>
       <h3 className="text-black font-semibold">Send Token to a adress</h3>
@@ -109,9 +124,14 @@ function SendToken({ contract, toast, tokenMinted }: Iprops) {
       />
       <Button
         className="self-stretch action-btn"
-        label="Send Tokens"
+        disabled={isBtnLocked}
         onClick={() => sendTokenHandler()}
-      />
+      >
+        {isBtnLocked && (
+          <CgSpinner className="animate-spin absolute left-[30%] md:left-[40%]" />
+        )}
+        <span>Send</span>
+      </Button>
       <TxStatusDialog
         txState={isModal}
         msgLink={blockHashRef.current as string}

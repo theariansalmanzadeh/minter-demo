@@ -23,13 +23,14 @@ function Panel() {
   const account = useAccount();
   const { provider: authProvider, address } = useEthereum();
   const particleProvider = useParticleProvider();
-  console.log(authProvider);
 
   const provider = useMemo(() => {
-    if (particleProvider === undefined) return;
-    if (isEVMProvider(particleProvider))
+    if (particleProvider === undefined && authProvider === undefined) return;
+    if (particleProvider && isEVMProvider(particleProvider))
       return new ethers.providers.Web3Provider(particleProvider);
-  }, [particleProvider]);
+    else if (authProvider && isEVMProvider(authProvider))
+      return new ethers.providers.Web3Provider(authProvider);
+  }, [particleProvider, authProvider]);
   const signer = useMemo(() => {
     if (!provider) return;
 
