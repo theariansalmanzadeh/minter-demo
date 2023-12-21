@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { ModalProvider } from "@particle-network/connectkit";
-import { AuthType } from "@particle-network/auth-core";
 import { EthereumGoerli } from "@particle-network/chains";
 import { evmWallets } from "@particle-network/connectors";
 const wcProjectId = import.meta.env.VITE_WC_PORJECT_ID;
