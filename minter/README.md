@@ -86,7 +86,7 @@ after that run the server with npm run dev in the terminal of the porject root.
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/theariansalmanzadeh/minter-demo.git
 ```
 
 Go to the project directory

@@ -7,18 +7,9 @@ import {
   FaExternalLinkAlt,
 } from "react-icons/fa";
 import { Chip } from "primereact/chip";
+import { Iprops } from "./types";
 
-function TxStatusDialog({
-  txState,
-  msgLink,
-  visible,
-  onClose,
-}: {
-  txState: modalType;
-  msgLink: string;
-  visible: modalType;
-  onClose(value: modalType): void;
-}) {
+function TxStatusDialog({ txState, msgLink, visible, onClose }: Iprops) {
   const borderColor = (status: modalType) => {
     switch (status) {
       case modalType.success:

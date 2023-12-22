@@ -1,4 +1,3 @@
-import { ethers } from "ethers";
 import profileLogo from "../../assets/images/profile.jpg";
 import { Button } from "primereact/button";
 import React, { useCallback, useEffect, useState } from "react";
@@ -7,6 +6,7 @@ import { useAccount, useParticleConnect } from "@particle-network/connectkit";
 import { useEthereum } from "@particle-network/auth-core-modal";
 import { useConnect } from "@particle-network/auth-core-modal";
 import { formatBalance } from "../../utils/web3";
+import { Iprops } from "./types";
 
 function Profile({ contract, provider }: Iprops) {
   const [loading, setLoading] = useState(false);
@@ -75,8 +75,3 @@ function Profile({ contract, provider }: Iprops) {
 const ProfileComp = React.memo(Profile);
 
 export default ProfileComp;
-
-interface Iprops {
-  provider: ethers.providers.Web3Provider | undefined;
-  contract: ethers.Contract;
-}

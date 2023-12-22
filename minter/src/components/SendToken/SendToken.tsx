@@ -1,14 +1,7 @@
-import React, {
-  RefObject,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { InputNumber } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
 import { ethers } from "ethers";
 import { useAccount } from "@particle-network/connectkit";
 import { useEthereum } from "@particle-network/auth-core-modal";
@@ -16,6 +9,7 @@ import { formatBalance, isAddressValid } from "../../utils/web3";
 import TxStatusDialog from "../TxStatusDialog/TxStatusDialog";
 import { modalType } from "../../types/ModaStatus";
 import { CgSpinner } from "react-icons/cg";
+import { Iprops } from "./types";
 
 function SendToken({ contract, toast, tokenMinted }: Iprops) {
   const account = useAccount();
@@ -146,9 +140,3 @@ function SendToken({ contract, toast, tokenMinted }: Iprops) {
 }
 
 export default SendToken;
-
-interface Iprops {
-  contract: ethers.Contract;
-  toast: RefObject<Toast>;
-  tokenMinted: number;
-}

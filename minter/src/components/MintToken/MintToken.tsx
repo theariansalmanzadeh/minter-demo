@@ -1,11 +1,11 @@
-import React, { RefObject, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { InputNumber } from "primereact/inputnumber";
 import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
 import { ethers } from "ethers";
 import TxStatusDialog from "../TxStatusDialog/TxStatusDialog";
 import { modalType } from "../../types/ModaStatus";
 import { CgSpinner } from "react-icons/cg";
+import { Iprops } from "./types";
 
 function MintToken({ contract, toast, setTokenMinted }: Iprops) {
   const [mintAmount, setMintAmount] = useState(0);
@@ -46,7 +46,6 @@ function MintToken({ contract, toast, setTokenMinted }: Iprops) {
       setIsBtnLocked(false);
       setTokenMinted(mintAmount);
     } catch (e) {
-      console.log(e);
       setIsBtnLocked(false);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
@@ -86,9 +85,3 @@ function MintToken({ contract, toast, setTokenMinted }: Iprops) {
 }
 
 export default MintToken;
-
-interface Iprops {
-  contract: ethers.Contract;
-  toast: RefObject<Toast>;
-  setTokenMinted: (value: number) => void;
-}
