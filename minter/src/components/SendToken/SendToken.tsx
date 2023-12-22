@@ -72,6 +72,9 @@ function SendToken({ contract, toast, tokenMinted }: Iprops) {
       }
       setIsBtnLocked(false);
     } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      e.code === 4001 && setIsModal(modalType.failed);
       setIsBtnLocked(false);
     }
   };

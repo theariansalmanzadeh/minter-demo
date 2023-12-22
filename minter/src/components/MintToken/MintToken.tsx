@@ -48,7 +48,9 @@ function MintToken({ contract, toast, setTokenMinted }: Iprops) {
     } catch (e) {
       console.log(e);
       setIsBtnLocked(false);
-      setIsModal(modalType.failed);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      e.code === 4001 && setIsModal(modalType.failed);
     }
   };
   return (
