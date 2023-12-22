@@ -52,10 +52,12 @@ function SendToken({ contract, toast, tokenMinted }: Iprops) {
       return;
     }
     try {
+      setIsBtnLocked(true);
       const tx = await contract.transfer(
         toAddress,
         ethers.utils.parseEther(fromAmount.toString())
       );
+      setIsModal(modalType.ongiong);
       const res = await tx.wait();
       if (res.status === 1) {
         setIsModal(modalType.success);
@@ -120,7 +122,7 @@ function SendToken({ contract, toast, tokenMinted }: Iprops) {
         onChange={(e) => setToAddress(e.target.value)}
       />
       <Button
-        className="self-stretch action-btn"
+        className="mt-2 md:mt-5 self-stretch action-btn flex justify-center relative"
         disabled={isBtnLocked}
         onClick={() => sendTokenHandler()}
       >

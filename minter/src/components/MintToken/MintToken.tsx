@@ -65,7 +65,7 @@ function MintToken({ contract, toast, setTokenMinted }: Iprops) {
         onChange={(e) => setMintAmount(e.value ?? 0)}
       />
       <Button
-        className="mt-2 md:mt-5 self-stretch action-btn felx justify-center relative"
+        className="mt-2 md:mt-5 self-stretch action-btn flex justify-center relative"
         disabled={isBtnLocked}
         onClick={() => mintHandler()}
       >
