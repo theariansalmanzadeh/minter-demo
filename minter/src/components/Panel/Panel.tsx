@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import {
   TabView,
   TabPanel,
@@ -8,46 +7,22 @@ import Profile from "../Profile/Profile";
 import Form from "../Form/Form.tsx";
 import { FaRegUser } from "react-icons/fa6";
 import { MdOutlineToken } from "react-icons/md";
-import {
-  ConnectButton,
-  useParticleProvider,
-} from "@particle-network/connectkit";
+import { ConnectButton } from "@particle-network/connectkit";
 import { useAccount } from "@particle-network/connectkit";
-import { useEthereum } from "@particle-network/auth-core-modal";
-import { isEVMProvider } from "@particle-network/connectors";
-import { contractAddress } from "../../assets/content/content.ts";
-import contAbi from "../../assets/data/tokenMinterAbi.json";
-import { ethers } from "ethers";
+import useWeb3 from "@/hooks/useWeb3.tsx";
 
 function Panel() {
   const account = useAccount();
-  const { provider: authProvider, address } = useEthereum();
-  const particleProvider = useParticleProvider();
-
-  const provider = useMemo(() => {
-    if (particleProvider === undefined && authProvider === undefined) return;
-    if (particleProvider && isEVMProvider(particleProvider))
-      return new ethers.providers.Web3Provider(particleProvider);
-    else if (authProvider && isEVMProvider(authProvider))
-      return new ethers.providers.Web3Provider(authProvider);
-  }, [particleProvider, authProvider]);
-  const signer = useMemo(() => {
-    if (!provider) return;
-
-    return provider.getSigner();
-  }, [provider]);
-  const contract = useMemo(
-    () => new ethers.Contract(contractAddress, contAbi, signer),
-    [signer]
-  );
+  const { provider, address, contract } = useWeb3();
+  console.log(contract);
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center">
+    <div className="flex items-center justify-center w-screen h-screen">
       {(account === "" || account === undefined) && address === null ? (
         <ConnectButton />
       ) : (
         <TabView
-          className="border-2 rounded-md overflow-hidden border-primary w-4/5 md:w-3/5 lg:w-1/2 shadow-md shadow-primary"
+          className="w-4/5 overflow-hidden border-2 rounded-md shadow-md border-primary md:w-3/5 lg:w-1/2 shadow-primary"
           pt={{
             nav: {
               className:

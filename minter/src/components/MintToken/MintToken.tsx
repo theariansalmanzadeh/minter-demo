@@ -56,7 +56,7 @@ function MintToken({ contract, toast, setTokenMinted }: Iprops) {
     <React.Fragment>
       <h3 className="font-semibold text-black">Mint a number of Tokens</h3>
       <InputNumber
-        className="inputs w-full rounded-md"
+        className="w-full rounded-md inputs"
         min={0}
         maxFractionDigits={2}
         max={1000}
@@ -65,7 +65,7 @@ function MintToken({ contract, toast, setTokenMinted }: Iprops) {
         onChange={(e) => setMintAmount(e.value ?? 0)}
       />
       <Button
-        className="mt-2 md:mt-5 self-stretch action-btn flex justify-center relative"
+        className="relative flex self-stretch justify-center mt-2 md:mt-5 action-btn"
         disabled={isBtnLocked}
         onClick={() => mintHandler()}
       >

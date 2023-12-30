@@ -1,12 +1,16 @@
 import { defineConfig, loadEnv } from "vite";
+import path from "path";
 import react from "@vitejs/plugin-react";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
+import { imagetools } from "vite-imagetools";
 
 const env = loadEnv("all", process.cwd());
 
 export default defineConfig({
   plugins: [
     react(),
+
+    imagetools(),
     nodePolyfills({
       include: ["path", "stream", "util"],
       exclude: ["http"],
@@ -37,6 +41,9 @@ export default defineConfig({
     alias: {
       stream: "stream-browserify",
       util: "util",
+      "@": path.resolve(__dirname, "./src"),
+      "@assets": path.resolve(__dirname, "./src/assets"),
+      "@components": path.resolve(__dirname, "./src/components"),
     },
   },
   server: {

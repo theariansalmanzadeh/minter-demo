@@ -1,4 +1,5 @@
-import profileLogo from "../../assets/images/profile.jpg";
+//@ts-ignore
+import profileLogo from "../../assets/images/profile.jpg?w=40";
 import { Button } from "primereact/button";
 import React, { useCallback, useEffect, useState } from "react";
 import { AiOutlineDisconnect } from "react-icons/ai";
@@ -24,6 +25,7 @@ function Profile({ contract, provider }: Iprops) {
     try {
       const _balance = await provider.getBalance(userAddress as string);
       const _balToken = await contract.balanceOf(userAddress);
+      console.log(_balToken);
 
       setBalance(formatBalance(_balance));
       setBalanceToken(formatBalance(_balToken));
@@ -40,14 +42,14 @@ function Profile({ contract, provider }: Iprops) {
     getUserBalance();
   }, [getUserBalance]);
   return (
-    <div className="h-full w-full relative">
+    <div className="relative w-full h-full">
       {loading && (
-        <div className="h-full w-full z-10 animate-pulse absolute top-0 left-0">
-          <div className="opactiy-10 bg-slate-400 h-full w-full"></div>
+        <div className="absolute top-0 left-0 z-10 w-full h-full animate-pulse">
+          <div className="w-full h-full opactiy-10 bg-slate-400"></div>
         </div>
       )}
-      <div className="w-full flex flex-col items-start gap-3 py-5 px-2 md:px-4 text-black">
-        <div className="flex lg:block items-center gap-2">
+      <div className="flex flex-col items-start w-full gap-3 px-2 py-5 text-black md:px-4">
+        <div className="flex items-center gap-2 lg:block">
           <img className="w-10" src={profileLogo} alt="profile Avatar" />
           <h2>Account:</h2>
           <span className="block text-sm md:text-lg">
@@ -58,7 +60,7 @@ function Profile({ contract, provider }: Iprops) {
         <div>Tokens owned :{balanceToken}</div>
         <div>Chain: Goerli</div>
         <Button
-          className="mt-10 self-stretch bg-red-900 text-white justify-center gap-2"
+          className="self-stretch justify-center gap-2 mt-10 text-white bg-red-900"
           onClick={() => {
             disconnect();
             particleConnect.disconnect();
