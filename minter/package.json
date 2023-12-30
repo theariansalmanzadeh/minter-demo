@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@img/sharp-win32-x64": "^0.33.1",
     "@particle-network/auth": "^1.2.2",
     "@particle-network/connect": "^1.2.1",
     "@particle-network/connect-react-ui": "^1.2.1",
