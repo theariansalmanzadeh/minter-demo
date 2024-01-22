@@ -1,57 +1,31 @@
 import React, { useRef, useState } from "react";
+
+//prime components
 import { InputNumber } from "primereact/inputnumber";
 import { Button } from "primereact/button";
-import { ethers } from "ethers";
-import TxStatusDialog from "../TxStatusDialog/TxStatusDialog";
-import { modalType } from "../../types/ModaStatus";
 import { CgSpinner } from "react-icons/cg";
+
+//types
 import { Iprops } from "./types";
+import { modalType } from "../../types/ModaStatus";
+
+//custom hooks
+import useTrasaction from "@/hooks/useTrasaction";
+import useShowToast from "@/hooks/useShowToast";
+
+//component
+import TxStatusDialog from "../TxStatusDialog/TxStatusDialog";
 
 function MintToken({ contract, toast, setTokenMinted }: Iprops) {
+  const { mintHandler } = useTrasaction();
+  const { showAddressError } = useShowToast(toast);
+
   const [mintAmount, setMintAmount] = useState(0);
   const [isBtnLocked, setIsBtnLocked] = useState(false);
   const [isModal, setIsModal] = useState<modalType>(modalType.idle);
+
   const blockHashRef = useRef<string | null>(null);
-  const showAddressError = (msg: string) => {
-    if (toast.current === null) return;
-    toast.current.show({
-      severity: "error",
-      summary: "Error",
-      detail: msg,
-      life: 20000,
-    });
-  };
 
-  const mintHandler = async () => {
-    if (isBtnLocked) return;
-    if (mintAmount === 0) {
-      showAddressError("no Amount set");
-      return;
-    }
-    try {
-      setIsBtnLocked(true);
-
-      const tx = await contract.mint(
-        ethers.utils.parseEther(mintAmount.toString())
-      );
-      setIsModal(modalType.ongiong);
-      const res = await tx.wait();
-      if (res.status === 1) {
-        setIsModal(modalType.success);
-        blockHashRef.current = res.transactionHash;
-      } else if (res.status === 0) {
-        blockHashRef.current = res.transactionHash;
-        setIsModal(modalType.failed);
-      }
-      setIsBtnLocked(false);
-      setTokenMinted(mintAmount);
-    } catch (e) {
-      setIsBtnLocked(false);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
-      e.code === 4001 && setIsModal(modalType.failed);
-    }
-  };
   return (
     <React.Fragment>
       <h3 className="font-semibold text-black">Mint a number of Tokens</h3>
@@ -67,7 +41,18 @@ function MintToken({ contract, toast, setTokenMinted }: Iprops) {
       <Button
         className="relative flex self-stretch justify-center mt-2 md:mt-5 action-btn"
         disabled={isBtnLocked}
-        onClick={() => mintHandler()}
+        onClick={() =>
+          mintHandler(
+            showAddressError,
+            setTokenMinted,
+            setIsBtnLocked,
+            setIsModal,
+            isBtnLocked,
+            mintAmount,
+            contract,
+            blockHashRef
+          )
+        }
       >
         {isBtnLocked && (
           <CgSpinner className="animate-spin absolute left-[30%] md:left-[40%]" />

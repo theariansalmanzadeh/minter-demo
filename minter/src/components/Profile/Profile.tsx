@@ -1,46 +1,41 @@
 //@ts-ignore
-import profileLogo from "../../assets/images/profile.jpg?w=40";
-import { Button } from "primereact/button";
-import React, { useCallback, useEffect, useState } from "react";
-import { AiOutlineDisconnect } from "react-icons/ai";
-import { useAccount, useParticleConnect } from "@particle-network/connectkit";
+import profileLogo from "@/assets/images/profile.jpg?w=40";
+import React, { useEffect, useState } from "react";
+
+//particle hooks
+import { useAccount } from "@particle-network/connectkit";
 import { useEthereum } from "@particle-network/auth-core-modal";
-import { useConnect } from "@particle-network/auth-core-modal";
-import { formatBalance } from "../../utils/web3";
+
+//custom hooks
+import useBalance from "@/hooks/useBalance";
+
+//types
 import { Iprops } from "./types";
+import { ethers } from "ethers";
+
+//custom components
+import DisconnectBtn from "./DisconnectBtn";
 
 function Profile({ contract, provider }: Iprops) {
+  const account = useAccount();
+  const { address } = useEthereum();
+
+  const userAddress = address || account;
+
+  const { formatAccount, getUserBalance } = useBalance(
+    userAddress as string,
+    contract,
+    provider as ethers.providers.Web3Provider
+  );
+
   const [loading, setLoading] = useState(false);
   const [balance, setBalance] = useState("");
   const [balanceToken, setBalanceToken] = useState("");
-  const account = useAccount();
-  const { address } = useEthereum();
-  const particleConnect = useParticleConnect();
-  const { disconnect } = useConnect();
-  const userAddress = address || account;
-
-  const getUserBalance = useCallback(async () => {
-    if (provider === undefined) return;
-    setLoading(true);
-    try {
-      const _balance = await provider.getBalance(userAddress as string);
-      const _balToken = await contract.balanceOf(userAddress);
-      console.log(_balToken);
-
-      setBalance(formatBalance(_balance));
-      setBalanceToken(formatBalance(_balToken));
-    } catch (e) {
-      setLoading(false);
-    }
-    setLoading(false);
-  }, [provider, userAddress, contract]);
-
-  const formatAccount = (address: string) =>
-    `${address.slice(0, 5)}...${address.slice(-4)}`;
 
   useEffect(() => {
-    getUserBalance();
+    getUserBalance(setBalanceToken, setBalance, setLoading);
   }, [getUserBalance]);
+
   return (
     <div className="relative w-full h-full">
       {loading && (
@@ -59,16 +54,7 @@ function Profile({ contract, provider }: Iprops) {
         <div className="text-left">Balance :{balance} Goerli Eth</div>
         <div>Tokens owned :{balanceToken}</div>
         <div>Chain: Goerli</div>
-        <Button
-          className="self-stretch justify-center gap-2 mt-10 text-white bg-red-900"
-          onClick={() => {
-            disconnect();
-            particleConnect.disconnect();
-          }}
-        >
-          Disconnect
-          <AiOutlineDisconnect size={24} />
-        </Button>
+        <DisconnectBtn />
       </div>
     </div>
   );

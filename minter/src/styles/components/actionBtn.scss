@@ -1,5 +1,7 @@
 .action-btn {
-  @apply outline-none outline-offset-0 bg-primary duration-500 delay-500 text-lg py-2;
+  @apply outline-none outline-offset-0
+         bg-primary
+           duration-500 delay-500 text-lg py-2;
   outline: none !important;
   &:hover {
     @apply bg-primaryDark;

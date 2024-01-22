@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./globals.scss";
 @import "./variables.scss";
 @import "./components/Inputs.scss";
 @import "./components/actionBtn.scss";

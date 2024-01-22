@@ -1,41 +1,32 @@
 import { useRef, useState } from "react";
-import { pageTab } from "./types";
-import { Button } from "primereact/button";
-import MintToken from "../MintToken/MintToken";
-import SendToken from "../SendToken/SendToken";
+//prime components
 import { Toast } from "primereact/toast";
-import { ethers } from "ethers";
+//custom components
+import { Button } from "primereact/button";
+import ContentForm from "./ContentForm";
+//types
+import { Iprops, pageTab } from "./types";
 
 function Form({ contract }: Iprops) {
   const toast = useRef<Toast>(null);
-  const [page, setPage] = useState(pageTab.mint);
-  const [tokenMinted, setTokenMinted] = useState(0);
 
-  const content = () => {
-    if (page === pageTab.mint)
-      return (
-        <MintToken
-          contract={contract}
-          setTokenMinted={setTokenMinted}
-          toast={toast}
-        />
-      );
-    else if (page === pageTab.send)
-      return (
-        <SendToken
-          contract={contract}
-          tokenMinted={tokenMinted}
-          toast={toast}
-        />
-      );
-  };
+  const [page, setPage] = useState<pageTab>(pageTab.mint);
+  const [tokenMinted, setTokenMinted] = useState(0);
 
   return (
     <div className="bg-white">
       <div className="mx-[1rem] md:mx-[3rem] pt-1 h-[18rem] mb-5 md:pt-2 flex flex-col items-center gap-4">
-        {content()}
+        {
+          <ContentForm
+            page={page}
+            tokenMinted={tokenMinted}
+            contract={contract}
+            setTokenMinted={setTokenMinted}
+            toast={toast}
+          />
+        }
       </div>
-      <div className="flex gap-5 justify-center">
+      <div className="flex justify-center gap-5">
         <Button
           className="nav-btn"
           disabled={page === pageTab.mint}
@@ -65,7 +56,3 @@ function Form({ contract }: Iprops) {
 }
 
 export default Form;
-
-interface Iprops {
-  contract: ethers.Contract;
-}
