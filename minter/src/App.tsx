@@ -1,7 +1,8 @@
 import { useLayoutEffect, useState } from "react";
+
 // import "./App.css";
 import "@particle-network/connectkit/dist/index.css";
-
+import { Helmet } from "react-helmet";
 import Panel from "@/components/Panel/Panel";
 import { checkIsPhone } from "@/utils/global";
 // import Banner from "./components/BannerPhone/Banner";
@@ -14,16 +15,33 @@ function App() {
     setBannerPhone(<module.default />);
   };
 
-  useLayoutEffect(() => {
-    if (checkIsPhone()) {
-      getBannerForPhone();
-    }
-  }, []);
+  // useLayoutEffect(() => {
+  //   if (checkIsPhone()) {
+  //     getBannerForPhone();
+  //   }
+  // }, []);
 
   return (
-    <div className="w-full h-full">
-      <Panel />
-      {checkIsPhone() && bannerPhone}
+    <div>
+      <Helmet>
+        <title>Zaraban Minter</title>
+        <meta property="og:title" content="mint wallet with email" />
+        <meta
+          property="og:image"
+          content="https://cryptologos.cc/logos/chainlink-link-logo.png?v=029"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:description"
+          content="a demo dapp for minting token on goerli chain"
+        />
+      </Helmet>
+      <div className="w-full h-full">
+        <Panel />
+        {checkIsPhone() && bannerPhone}
+      </div>
     </div>
   );
 }
