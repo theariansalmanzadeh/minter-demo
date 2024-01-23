@@ -39,7 +39,7 @@ function App() {
         />
         <meta
           property="og:url"
-          content="minter-demo.vercel.app"
+          content="https://minter-demo.vercel.app/"
           data-react-helmet="true"
         />
         <meta
