@@ -25,7 +25,10 @@ function App() {
     <div>
       <Helmet>
         <title>Zaraban Minter</title>
-        <meta property="og:title" content="mint wallet with email" />
+        <meta
+          property="og:title"
+          content="mint tokens with email address wallets"
+        />
         <meta
           property="og:image"
           content="https://cryptologos.cc/logos/chainlink-link-logo.png?v=029"
