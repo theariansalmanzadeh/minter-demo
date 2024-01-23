@@ -37,6 +37,16 @@ function App() {
           property="og:description"
           content="a demo dapp for minting token on goerli chain"
         />
+        <meta
+          property="og:url"
+          content="minter-demo.vercel.app"
+          data-react-helmet="true"
+        />
+        <meta
+          name="description"
+          content="a demo project for showing how to mint tokens with email address"
+          data-react-helmet="true"
+        />
       </Helmet>
       <div className="w-full h-full">
         <Panel />
