@@ -4,3 +4,8 @@ export enum modalType {
   success = "successfull",
   failed = "failed",
 }
+
+export enum errorTypes {
+  failed = "1",
+  filtered = "2",
+}
